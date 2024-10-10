@@ -1,0 +1,103 @@
+Started by user Miguel Ramos
+Obtained Jenkinsfile from git https://gitlab.com/developersjenkins/react-jenkins-luis.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/react-jenkins-luis
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+Cloning the remote Git repository
+Cloning repository https://gitlab.com/developersjenkins/react-jenkins-luis.git
+ > git init /var/jenkins_home/workspace/react-jenkins-luis # timeout=10
+Fetching upstream changes from https://gitlab.com/developersjenkins/react-jenkins-luis.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://gitlab.com/developersjenkins/react-jenkins-luis.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git config remote.origin.url https://gitlab.com/developersjenkins/react-jenkins-luis.git # timeout=10
+ > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
+Avoid second fetch
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 3ee1b661e86978ed8f4bdc9f7a2c309748364d77 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 3ee1b661e86978ed8f4bdc9f7a2c309748364d77 # timeout=10
+Commit message: "correction"
+First time build. Skipping changelog.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . node:20.13.1
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container d9a6d08fa7486d11ca2b527a97e442890f5fe25d7f4bdc05c9f9c946b5b4d4e1
+$ docker run -t -d -u 0:0 -u root -w /var/jenkins_home/workspace/react-jenkins-luis --volumes-from d9a6d08fa7486d11ca2b527a97e442890f5fe25d7f4bdc05c9f9c946b5b4d4e1 -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** node:20.13.1 cat
+$ docker top d82e816ce823742510b52ff74ffa3894b1dcd482b8e0c636532afddb468cd64b -eo pid,comm
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Install)
+[Pipeline] echo
+Installing dependencies...
+[Pipeline] sh
++ npm ci
+npm WARN deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm WARN deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+
+added 410 packages, and audited 411 packages in 7s
+
+126 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+[Pipeline] stash
+Stashed 11469 file(s)
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] echo
+Running tests...
+[Pipeline] unstash
+[Pipeline] sh
++ npm run test
+
+> react-jenkins@0.0.0 test
+> vitest --reporter=junit --outputFile=junit.xml
+
+JUNIT report written to /var/jenkins_home/workspace/react-jenkins-luis/junit.xml
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build)
+Stage "Build" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] cleanWs
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] done
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+$ docker stop --time=1 d82e816ce823742510b52ff74ffa3894b1dcd482b8e0c636532afddb468cd64b
+$ docker rm -f --volumes d82e816ce823742510b52ff74ffa3894b1dcd482b8e0c636532afddb468cd64b
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
